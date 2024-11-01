@@ -1,0 +1,12 @@
+--Write an SQL query to convert each name in Title Case
+
+
+User_id     name
+1           aLicE
+2           boB
+3           John
+4           cANDICE
+5           brOcK
+
+SELECT user_id, CONCAT(UPPER(substring(name,1,1)),LOWER(SUBSTRING(name,2,LENGTH(name)-1))) as person
+FROM users
