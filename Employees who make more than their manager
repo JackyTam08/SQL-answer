@@ -1,0 +1,7 @@
+--Write an SQL query to find all the employees who make more than their manager
+
+SELECT e.name, e.salary, m.name, m.salary
+FROM employees e
+LEFT JOIN employees m
+ON e.manager_employee_id = m.employee_id
+WHERE e.salary > m.salary
