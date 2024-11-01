@@ -63,6 +63,56 @@ WHERE emp_name NOT IN (
     or job_title LIKE '%Manager%'
 )
 
+--write an SQL query to extract the longest single word from each title of the book (Expert) 
+WITH RecursiveSplit AS (
+    SELECT 
+        book_id,
+        author,
+        title,
+        SUBSTRING(title, 1, INSTR(title || ' ', ' ') - 1) AS word,
+        SUBSTRING(title, INSTR(title || ' ', ' ') + 1) AS remaining      --Instr - used to find the position of the first space in the string
+    FROM Books
+    UNION ALL
+    SELECT 
+        book_id,
+        author,
+        title,
+        SUBSTRING(remaining, 1, INSTR(remaining || ' ', ' ') - 1),
+        SUBSTRING(remaining, INSTR(remaining || ' ', ' ') + 1)
+    FROM RecursiveSplit
+    WHERE remaining <> ''
+),
+LongestWord AS (
+    SELECT 
+        book_id,
+        author,
+        word,
+        LENGTH(word) AS word_length,
+        ROW_NUMBER() OVER (PARTITION BY book_id ORDER BY LENGTH(word) DESC, word) AS rn
+    FROM RecursiveSplit
+)
+
+SELECT 
+    book_id,
+    word,
+    author
+FROM 
+    LongestWord
+WHERE 
+    rn = 1
+ORDER BY 
+    book_id;
+
+
+--Write an SQL query to display the new id and name of the student (Hard) 
+SELECT CASE WHEN id = (SELECT max(id) FROM students) and id % 2 = 1 THEN id 
+    when id % 2 = 0 THEN id - 1 ELSE id + 1 END as id, name 
+FROM students
+ORDER BY id 
+
+
+
+
 
 
 
