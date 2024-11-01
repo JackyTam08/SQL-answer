@@ -1,0 +1,81 @@
+--Write an SQL query to retrive all books pulbished in the 21st century
+SELECT book_id, title, date, sales
+FROM books 
+WHERE date BETWEEN '2000-01-01' AND '2099-12-31'
+ORDER BY sales desc
+
+
+--write an SQL query to find the total number of reviews
+SELECT sum(reviews)
+FROM (
+SELECT count(product_name) as reviews
+FROM product_reviews
+GROUP BY rating
+) as a
+
+
+--write a sql query to retrieve the name of all employee who have got 'e' in the middle of their names
+SELECT name as employee
+FROM Employees
+WHERE 
+    name LIKE '%e%' AND 
+    CHARINDEX('e', name) > 1 AND 
+    CHARINDEX('e', name) < LENGTH(name)
+ORDER BY salary ASC;
+
+
+--Write an SQL query to find employees who either earn above average or have been emplyoed for a long time
+with cte as (
+    SELECT department, avg(salary) as average_salary
+    FROM employees
+    GROUP BY 1
+)
+
+SELECT *
+FROM cte
+JOIN employees 
+on cte.department = employees.department
+WHERE average_salary < salary or 
+years_employed > 10
+
+--Write an SQL query to identify products with a rating higher than the average (M) 
+SELECT product_name as product, rating
+FROM reviews
+WHERE rating > (SELECT avg(rating) FROM reviews)
+
+
+
+--Write an SQL query to retrieve the most recent price for each category (M) 
+SELECT category, price as money, updated_at
+FROM (   
+SELECT category, price, updated_at, dense_rank() OVER(PARTITION BY category ORDER BY updated_at desc) as ranking
+FROM products
+) AS a 
+WHERE ranking = 1
+
+--Write an SQL query to retrieve employees with non-standard job titles
+SELECT emp_name as employee
+FROM employees
+WHERE emp_name NOT IN (
+    SELECT emp_name AS employee
+    FROM employees
+    WHERE job_title IN ('Manager', 'Engineer') 
+    or job_title LIKE '%Manager%'
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
