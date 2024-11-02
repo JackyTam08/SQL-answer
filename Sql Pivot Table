@@ -1,0 +1,16 @@
+--Write an SQL query to Pivot the table
+
+student_id subject        grade
+1           English        A+ 
+1           Math           C+
+1           Science        B    
+2           English        B         
+2           Math           C+        
+2           Science        A+                  
+
+
+
+SELECT student_id, MAX(CASE WHEN subject = 'English' THEN grade end) as English, max(CASE WHEN subject = 'Math' then grade end) as Math, 
+MAX(case when subject = 'Science' then grade END) as Science
+FROM students
+GROUP BY 1
