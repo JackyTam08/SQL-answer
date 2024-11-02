@@ -1,0 +1,18 @@
+--Write a SQL query to find the price for any day where the price was the same as the previous day
+
+Price_id  Price_date       price
+1         2023-10-01        105
+2         2023-10-02        105
+3         2023-10-03        106            
+4         2023-10-04        106    
+5         2023-10-05        108   
+6         2023-10-06        108          
+7         2023-10-07        107        
+
+
+
+SELECT p2.price_date, p2.price
+FROM prices p1
+JOIN prices p2
+ON p2.price_date = DATE(p1.price_date, '+1 day')
+WHERE p1.price = p2.price
