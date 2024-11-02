@@ -1,0 +1,25 @@
+--Write an SQL query to find the missing IDs
+
+Customers           Customer_name
+1                    John 
+4                    Alice
+5                    Roger
+
+
+Expected Outputs
+
+ids
+2
+3
+
+
+WITH customer_ids AS (
+  SELECT 1 AS id
+  UNION ALL
+  SELECT id + 1
+  FROM customer_ids
+  WHERE id < (SELECT MAX(customer_id) FROM Customers)
+)
+SELECT id
+FROM customer_ids
+WHERE id NOT IN (SELECT customer_id FROM Customers);
