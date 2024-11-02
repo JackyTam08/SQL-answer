@@ -1,0 +1,11 @@
+--Write an SQL query to list the top 3 students for each subject based on their scores
+
+
+select student_name as name, subject, score
+FROM (
+SELECT student_name, subject, score, rank() OVER(PARTITION BY subject ORDER BY score desc) as ranking
+    FROM student_scores
+)
+WHERE ranking <= 3
+    
+
