@@ -1,0 +1,22 @@
+--Write an SQL query to find the highest rated episode aired on a weekday
+
+
+SELECT
+    show_id,
+    title,
+    episode_name,
+    air_date,
+    rating
+FROM
+    Shows
+WHERE
+    strftime('%w', air_date) BETWEEN '1' AND '5'
+ORDER BY
+    rating DESC
+LIMIT 1;
+
+
+strftime('%w', air_date) BETWEEN '1' AND '5' is a function that extracts the day of the week from the air_date column
+
+%w - return a number representing the day of the week 0 for sunday, 1 for monday, 6 for saturday
+
