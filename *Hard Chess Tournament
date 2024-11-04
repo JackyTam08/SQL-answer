@@ -1,0 +1,10 @@
+-Write an output of the players who have won atleast one amtch and lost atmost one match
+
+select
+    p.Name
+from Players p
+join Matches m
+on p.Id = m.Id
+group by p.Id
+HAVING SUM(m.Result) >= 1
+   AND COUNT(m.Result) - SUM(m.Result) <= 1;
