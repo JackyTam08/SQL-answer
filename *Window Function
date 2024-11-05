@@ -1,0 +1,85 @@
+ROWS BETWEEN 1 preceding and 1 following - starts from the first row and include all preceding rows up to the current row.
+*This is use for sum window 
+
+*Rows BETWEEN unbounded preceding and unbounded following 
+
+------
+
+Percent_rank - returns a number from 1 to 0. The hihgest being 1 and the lowest 0.
+----
+cume_dist will return a number from 1 towards 0 but never 0.
+
+---
+nth_value (&first_value)  - return the nth_value, but if we do not specify a range it will return null if the current 
+value is less than the nth. If we always want something display we need to specifiy a range
+nth_value(cats, #number) OVER (ORDER BY time)
+
+---
+The cats have decided the correct weight is the same as the 4th lightest cat. 
+All cats shall have this weight. Except in a fit of jealous rage 
+they decide to set the weight of the lightest three to 99.9
+
+
+---
+SELECT name, weight, COALESCE(nth_value(weight, 4) OVER (ORDER BY weight), 99.9) as imagined_weight
+FROM cats
+---
+
+ntile - devides the group into n equal partitions and denotes which partition each rows is in
+
+ntile(2) OVER(ORDER BY time) as which half
+
+---
+We would like to group our cats by color
+
+Return 3 rows, each row containing a color and a list of cat names
+
+SELECT color, array_agg(name) as names
+FROM cats
+GROUP BY 1
+ORDER BY color desc
+
+
+
+
+---------
+The cats have decided the correct weight is the same as the 4th lightest cat. 
+All cats shall have this weight. Except in a fit of jealous rage they decide to set the weight of the lightest three to 99.9
+
+Print a list of cats, their weights and their imagined weight
+
+select name, weight, coalesce(nth_value(weight, 4) over (order by weight), 99.9) as imagined_weight 
+from cats 
+order by weight
+
+-------
+The cats want to show their weight by breed. The cats agree that they should show the second lightest cat's weight (so as not to make other cats feel bad)
+Print a list of breeds, and the second lightest weight of that breed
+
+
+select distinct(breed), nth_value(weight, 2)
+over 
+(partition by breed order by weight RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING ) 
+as imagined_weight 
+from cats 
+order by breed;
+
+------
+Filtering Function
+We would like to find the average weight of cats grouped by breed. 
+Also, in the same query find the average weight of cats grouped by breed whose age is over 1
+
+SELECT breed, avg(weight) as average_weight, avg(weight) FILTER (WHERE age > 1) as average_old_weight 
+FROM cats
+GROUP BY 1
+ORDER BY 1
+
+
+
+
+
+
+
+
+
+
