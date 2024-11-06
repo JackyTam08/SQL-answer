@@ -1,0 +1,17 @@
+Your company has a users table that has accumulated many duplicate email addresses. 
+Some of these duplicates are due to differences in case sensitivity, 
+while others are due to unintentional whitespaces before or after the email. 
+For instance,john@example.com and JOHN@EXAMPLE.COM are considered duplicates.
+
+Write a SQL query that returns records from the users table while excluding any duplicate email entries. Your solution should:
+
+Treat email addresses as duplicates if they match after accounting for case and whitespace
+Include only one record for each email, keeping the record with the smallest id.
+Return the cleaned table, ordered by id.
+
+
+SELECT MIN(id) AS id,
+TRIM(LOWER(email)) AS cleaned_email              TRIM() - remove all spaces or special cases 
+FROM users
+GROUP BY cleaned_email
+ORDER BY id
